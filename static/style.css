@@ -1,4 +1,163 @@
-.comment {
-    border-top:dotted 1px #ddd;
-    font-size:0.7em;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --bg: #F6F5F1;
+    --surface: #FFFFFF;
+    --ink: #1A1A1A;
+    --ink-muted: #6B7280;
+    --accent: #C9A876;
+    --badge-bg: #DCEBFB;
+    --line: #E5E3DC;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink);
+    font-weight: 600;
+}
+
+/* 네비게이션바 */
+.navbar {
+    background-color: var(--surface) !important;
+    border-bottom: 1px solid var(--line) !important;
+    padding: 1rem 1.5rem;
+}
+
+.navbar-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--ink) !important;
+    letter-spacing: -0.02em;
+}
+
+.nav-link, .navbar .btn-link {
+    color: var(--ink-muted) !important;
+    font-weight: 500;
+    text-decoration: none !important;
+}
+
+.nav-link:hover, .navbar .btn-link:hover {
+    color: var(--accent) !important;
+}
+
+/* 카드 */
+.card {
+    background-color: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+.card-text {
+    color: var(--ink);
+    font-size: 1.02rem;
+}
+
+/* 뱃지 - 질문/답변 작성자, 날짜 */
+.badge-light {
+    background-color: var(--badge-bg) !important;
+    color: var(--ink) !important;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border-radius: 4px;
+}
+
+/* 제목 밑줄 구분선 */
+.border-bottom {
+    border-color: var(--line) !important;
+}
+
+/* 버튼 */
+.btn-primary {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #1A1A1A;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+.btn-primary:hover {
+    background-color: #B8955F;
+    border-color: #B8955F;
+    color: #1A1A1A;
+}
+
+.btn-outline-secondary {
+    color: var(--ink-muted);
+    border-color: var(--line);
+    border-radius: 6px;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--badge-bg);
+    color: var(--ink);
+    border-color: var(--badge-bg);
+}
+
+/* 입력창 */
+.form-control {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+}
+
+.form-control:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--badge-bg);
+}
+
+/* 테이블 (질문 목록) */
+table {
+    font-family: 'Inter', sans-serif;
+}
+
+table th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    border-top: none !important;
+    border-bottom: 2px solid var(--line) !important;
+}
+
+table td {
+    color: var(--ink);
+    vertical-align: middle !important;
+}
+
+table a {
+    color: var(--ink);
+    text-decoration: none;
+}
+
+table a:hover {
+    color: var(--accent);
+}
+
+/* 페이지네이션 */
+.pagination .page-link {
+    color: var(--ink-muted);
+    border: 1px solid var(--line);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* 링크 전역 */
+a {
+    color: var(--accent);
+}
+
+a:hover {
+    color: #B8955F;
 }
