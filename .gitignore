@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 가상환경
+venv/
+env/
+*.egg-info/
+
+# 장고
+db.sqlite3
+*.log
+media/
+
+# 환경변수 / 민감정보
+.env
+
+# 에디터
+.idea/
+.vscode/
+
+# 기타
+*.pot
+*.pyc
+staticfiles/
