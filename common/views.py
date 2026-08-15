@@ -1,4 +1,5 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from .forms import UserForm
@@ -6,17 +7,29 @@ from .forms import UserForm
 
 def signup(request):
     """
-    계정생성
+    회원가입
     """
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('index')
+            user = form.save()
+            auth_login(request, user)
+            return redirect('pybo:index')
     else:
         form = UserForm()
-    return render(request, 'common/signup.html', {'form': form})
+    context = {'form': form}
+    return render(request, 'common/signup.html', context)
+
+
+@login_required(login_url='common:login')
+def profile(request):
+    """
+    내 프로필
+    """
+    my_questions = request.user.author_question.all().order_by('-create_date')
+    my_answers = request.user.author_answer.all().order_by('-create_date')
+    context = {
+        'my_questions': my_questions,
+        'my_answers': my_answers,
+    }
+    return render(request, 'common/profile.html', context)

@@ -9,6 +9,8 @@ class Question(models.Model):
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(null=True, blank=True)
     voter = models.ManyToManyField(User, related_name='voter_question')
+    category = models.CharField(max_length=100, blank=True)
+    hit = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.subject

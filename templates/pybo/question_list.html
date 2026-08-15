@@ -10,6 +10,14 @@
                 <option value="popular" {% if so == 'popular' %}selected{% endif %}>인기순</option>
             </select>
         </div>
+        <div class="col-2">
+            <select class="form-control category-select">
+                <option value="">전체 카테고리</option>
+                {% for c in category_list %}
+                <option value="{{ c }}" {% if category == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <div class="col-4 input-group">
             <input type="text" class="form-control kw" value="{{ kw|default_if_none:'' }}">
             <div class="input-group-append">
@@ -22,9 +30,11 @@
         <tr class="text-center thead-dark">
             <th>번호</th>
             <th>추천</th>
-            <th style="width:50%">제목</th>
+            <th>카테고리</th>
+            <th style="width:40%">제목</th>
             <th>글쓴이</th>
             <th>작성일시</th>
+            <th>조회</th>
         </tr>
         </thead>
         <tbody>
@@ -40,19 +50,25 @@
                 <span class="badge badge-warning px-2 py-1">{{ question.voter.all.count }}</span>
                 {% endif %}
             </td>
+            <td>
+                {% if question.category %}
+                <span class="badge badge-light">{{ question.category }}</span>
+                {% endif %}
+            </td>
             <td class="text-left">
                 <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
                 {% if question.answer_set.count > 0 %}
                 <span class="text-danger small ml-2">{{ question.answer_set.count }}</span>
                 {% endif %}
             </td>
-            <td>{{ question.author.username }}</td>  <!-- 글쓴이 추가 -->
+            <td>{{ question.author.username }}</td>
             <td>{{ question.create_date }}</td>
+            <td>{{ question.hit }}</td>
         </tr>
         {% endfor %}
         {% else %}
         <tr>
-            <td colspan="3">질문이 없습니다.</td>
+            <td colspan="7">질문이 없습니다.</td>
         </tr>
         {% endif %}
         </tbody>
@@ -101,6 +117,7 @@
     <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
     <input type="hidden" id="page" name="page" value="{{ page }}">
     <input type="hidden" id="so" name="so" value="{{ so }}">
+    <input type="hidden" id="category" name="category" value="{{ category|default_if_none:'' }}">
 </form>
 {% endblock %}
 {% block script %}
@@ -113,12 +130,18 @@ $(document).ready(function(){
 
     $("#btn_search").on('click', function() {
         $("#kw").val($(".kw").val());
-        $("#page").val(1);  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+        $("#page").val(1);
         $("#searchForm").submit();
     });
 
     $(".so").on('change', function() {
         $("#so").val($(this).val());
+        $("#page").val(1);
+        $("#searchForm").submit();
+    });
+
+    $(".category-select").on('change', function() {
+        $("#category").val($(this).val());
         $("#page").val(1);
         $("#searchForm").submit();
     });

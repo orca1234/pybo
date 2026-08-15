@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <h5 class="my-3 border-bottom pb-2">내 프로필</h5>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h6 class="card-title">{{ user.username }}</h6>
+            <p class="card-text text-muted mb-1">이메일: {{ user.email|default:"등록된 이메일 없음" }}</p>
+            <p class="card-text text-muted mb-3">가입일: {{ user.date_joined|date:"Y년 m월 d일" }}</p>
+            <a href="{% url 'common:password_change' %}" class="btn btn-sm btn-outline-secondary">비밀번호 변경</a>
+        </div>
+    </div>
+
+    <h6 class="border-bottom pb-2 mb-3">내가 작성한 질문 ({{ my_questions|length }})</h6>
+    <ul class="list-group mb-4">
+        {% for question in my_questions %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
+            <small class="text-muted">{{ question.create_date|date:"Y-m-d" }}</small>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">작성한 질문이 없습니다.</li>
+        {% endfor %}
+    </ul>
+
+    <h6 class="border-bottom pb-2 mb-3">내가 작성한 답변 ({{ my_answers|length }})</h6>
+    <ul class="list-group">
+        {% for answer in my_answers %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'pybo:detail' answer.question.id %}#answer_{{ answer.id }}">{{ answer.content|truncatechars:40 }}</a>
+            <small class="text-muted">{{ answer.create_date|date:"Y-m-d" }}</small>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">작성한 답변이 없습니다.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

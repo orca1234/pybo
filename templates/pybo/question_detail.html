@@ -21,6 +21,9 @@
         <div class="col-11"> <!-- 질문영역 -->
             <div class="card">
                 <div class="card-body">
+                    {% if question.category %}
+                    <span class="badge badge-light mb-2">{{ question.category }}</span>
+                    {% endif %}
                     <div class="card-text">{{ question.content|mark }}</div>
                     <div class="d-flex justify-content-end">
                         {% if question.modify_date %}
@@ -73,8 +76,20 @@
             </div>
         </div>
     </div>
+
     <h5 class="border-bottom my-3 py-2">{{question.answer_set.count}}개의 답변이 있습니다.</h5>
-    {% for answer in question.answer_set.all %}
+
+    <div class="row justify-content-end my-3">
+        <div class="col-3">
+            <select class="form-control answer-so">
+                <option value="recent" {% if answer_so == 'recent' %}selected{% endif %}>최신순</option>
+                <option value="oldest" {% if answer_so == 'oldest' %}selected{% endif %}>작성순</option>
+                <option value="recommend" {% if answer_so == 'recommend' %}selected{% endif %}>추천순</option>
+            </select>
+        </div>
+    </div>
+
+    {% for answer in answer_list %}
     <a name="answer_{{ answer.id }}"></a>
     <div class="row my-3">
         <div class="col-1">  <!-- 추천영역 -->
@@ -136,6 +151,40 @@
         </div>
     </div>
     {% endfor %}
+
+    <!-- 답변 페이징 -->
+    <ul class="pagination justify-content-center">
+        {% if answer_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?answer_so={{ answer_so }}&answer_page={{ answer_list.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">이전</a>
+        </li>
+        {% endif %}
+        {% for page_number in answer_list.paginator.page_range %}
+        {% if page_number == answer_list.number %}
+        <li class="page-item active">
+            <a class="page-link" href="#">{{ page_number }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?answer_so={{ answer_so }}&answer_page={{ page_number }}">{{ page_number }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% if answer_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?answer_so={{ answer_so }}&answer_page={{ answer_list.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+
     <form action="{% url 'pybo:answer_create' question.id %}" method="post" class="my-3">
         {% csrf_token %}
         {% if form.errors %}
@@ -168,6 +217,9 @@ $(document).ready(function(){
         if(confirm("정말로 추천하시겠습니까?")) {
             location.href = $(this).data('uri');
         }
+    });
+    $(".answer-so").on('change', function() {
+        location.href = '?answer_so=' + $(this).val();
     });
 });
 </script>
